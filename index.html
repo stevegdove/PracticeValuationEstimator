@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>What's My Practice Worth? — Bridge Dental</title>
+<meta name="description" content="A free, private valuation estimator for dental practice owners. Enter numbers from your last three P&Ls and see what a private buyer or a DSO might pay — with the drivers explained." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<script data-goatcounter="https://bridgedental.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --rose:        #EF3A66;
+    --rose-dark:   #D62B56;
+    --rose-tint:   #FDE8EE;
+    --indigo:      #3A1F6E;
+    --purple:      #6E3AA6;
+    --ink:         #2A2E3F;
+    --ink-soft:    #5C6070;
+    --muted:       #8B8F9B;
+    --white:       #FFFFFF;
+    --lavender:    #EAE8F6;
+    --cloud:       #F0F0F2;
+    --line:        #E6E6EE;
+    --grad-hero:   linear-gradient(104deg, #150B2D 0%, #3A1F6E 50%, #C0306A 100%);
+    --active:      #1E8E5A;
+    --active-bg:   #E5F4ED;
+    --pilot:      #B8772A;
+    --pilot-bg:   #FBF0E1;
+    --font-head: 'Poppins', system-ui, sans-serif;
+    --font-body: 'Mulish', system-ui, sans-serif;
+    --radius-sm: 10px;
+    --radius:    15px;
+    --radius-lg: 22px;
+    --shadow: 0 1px 2px rgba(42,46,63,.04), 0 8px 24px rgba(42,46,63,.06);
+    --shadow-rose: 0 8px 24px rgba(239,58,102,.18);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); color: var(--ink-soft); line-height: 1.6; font-size: 16px; background: var(--white); }
+  h1,h2,h3 { font-family: var(--font-head); color: var(--ink); letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 .4em; }
+  h1 { font-weight: 800; font-size: clamp(1.9rem, 4vw, 2.7rem); }
+  h2 { font-weight: 700; font-size: clamp(1.3rem, 2.5vw, 1.6rem); }
+  h3 { font-weight: 600; font-size: 1.05rem; }
+  a { color: var(--rose); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .eyebrow { font-family: var(--font-head); font-weight: 600; color: var(--rose); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; display: block; margin-bottom: .55rem; }
+
+  header.site { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--line); }
+  header.site img { height: 34px; display: block; }
+  .pill { font-family: var(--font-head); font-weight: 600; font-size: .8rem; color: var(--indigo); background: var(--lavender); padding: .4rem .85rem; border-radius: 999px; display: inline-block; }
+
+  .hero { background: var(--lavender); padding: 40px 24px 44px; text-align: center; }
+  .hero p.sub { max-width: 620px; margin: 0 auto .9rem; font-size: 1.05rem; }
+  .privacy-note { font-family: var(--font-head); font-weight: 600; font-size: .85rem; color: var(--indigo); display: inline-flex; align-items: center; gap: .45rem; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: .45rem 1rem; }
+  .privacy-note svg { width: 15px; height: 15px; stroke: var(--rose); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } .results-col { position: static !important; } }
+
+  .card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.4rem 1.5rem; box-shadow: var(--shadow); margin-bottom: 18px; }
+  .card h3 { display: flex; align-items: center; gap: .6rem; margin-bottom: .9rem; }
+  .step-num { width: 26px; height: 26px; border-radius: 8px; background: var(--rose-tint); color: var(--rose); font-family: var(--font-head); font-weight: 700; font-size: .85rem; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+
+  label.f { font-family: var(--font-head); font-weight: 600; color: var(--ink); font-size: .88rem; display: block; margin-bottom: .3rem; }
+  .hint { font-size: .8rem; color: var(--muted); margin: .2rem 0 0; line-height: 1.45; }
+  input[type=text], input[type=email], input[type=number], select {
+    font-family: var(--font-body); font-size: 1rem; width: 100%;
+    padding: .6rem .75rem; border: 1px solid var(--line); border-radius: var(--radius-sm);
+    color: var(--ink); background: #fff; transition: border-color .15s, box-shadow .15s;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 0 3px rgba(239,58,102,.22); }
+  input::placeholder { color: var(--muted); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .grid3 { grid-template-columns: 1fr; } }
+  .fin-year { font-family: var(--font-head); font-weight: 600; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .4rem; }
+  .mt { margin-top: 14px; }
+
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+  .seg button { font-family: var(--font-head); font-weight: 600; font-size: .85rem; padding: .5rem .9rem; border: none; background: #fff; color: var(--ink-soft); cursor: pointer; }
+  .seg button.on { background: var(--indigo); color: #fff; }
+
+  input[type=range] { width: 100%; accent-color: var(--rose); }
+  .range-val { font-family: var(--font-head); font-weight: 700; color: var(--ink); font-size: .95rem; }
+
+  .chk { display: flex; align-items: center; gap: .55rem; font-size: .95rem; color: var(--ink); padding: .3rem 0; }
+  .chk input { width: 17px; height: 17px; accent-color: var(--rose); flex: none; }
+
+  /* Results */
+  .results-col { position: sticky; top: 18px; }
+  .results-shell { position: relative; }
+  .results-locked .results-body { filter: blur(9px); pointer-events: none; user-select: none; }
+  .gate { position: absolute; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 48px; z-index: 5; }
+  .gate-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 1.6rem; max-width: 380px; width: 100%; }
+  .gate-card .btn-primary { width: 100%; justify-content: center; margin-top: .9rem; }
+  .gate-note { font-size: .78rem; color: var(--muted); margin-top: .7rem; line-height: 1.5; }
+
+  .btn { font-family: var(--font-head); font-weight: 600; font-size: 1rem; padding: .75rem 1.3rem; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; transition: background .15s, border-color .15s; }
+  .btn-primary { background: var(--rose); color: #fff; box-shadow: var(--shadow-rose); }
+  .btn-primary:hover { background: var(--rose-dark); }
+  .btn-secondary { background: #fff; color: var(--ink); border-color: var(--line); }
+  .btn-secondary:hover { border-color: var(--muted); }
+
+  .track { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; margin-bottom: 14px; }
+  .track .t-label { font-family: var(--font-head); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .track .t-value { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--ink); margin: .25rem 0 .1rem; }
+  .track .t-basis { font-size: .85rem; color: var(--ink-soft); }
+  .badge { font-family: var(--font-head); font-weight: 600; font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; padding: .22rem .55rem; border-radius: 999px; display: inline-block; }
+  .badge-est { color: var(--pilot); background: var(--pilot-bg); }
+  .badge-ver { color: var(--active); background: var(--active-bg); }
+
+  .rangebar { position: relative; height: 10px; border-radius: 999px; background: var(--cloud); margin: .8rem 0 .3rem; }
+  .rangebar .fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, #6A37A4, #C0306A); }
+  .rangebar-labels { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); font-family: var(--font-head); font-weight: 600; }
+
+  .notice { background: var(--cloud); border-radius: var(--radius-sm); padding: .8rem .95rem; font-size: .88rem; line-height: 1.5; }
+
+  .narrative { border-top: 1px solid var(--line); margin-top: 1rem; padding-top: 1rem; }
+  .narrative h3 { margin-bottom: .5rem; }
+  .narrative ul { margin: 0; padding-left: 1.2rem; }
+  .narrative li { margin-bottom: .45rem; font-size: .93rem; }
+
+  .whatif { background: var(--lavender); border-radius: var(--radius); padding: 1rem 1.2rem; margin-top: 14px; }
+  .whatif h3 { color: var(--indigo); }
+  .whatif .wv { font-family: var(--font-head); font-weight: 800; font-size: 1.25rem; color: var(--indigo); }
+
+  .empty-state { text-align: center; padding: 2.4rem 1rem; color: var(--muted); }
+  .empty-state svg { width: 40px; height: 40px; stroke: var(--muted); fill: none; stroke-width: 1.6; stroke-linecap: round; margin-bottom: .6rem; }
+
+  .disclaimer { font-size: .78rem; color: var(--muted); line-height: 1.55; margin-top: 16px; }
+  footer.site { background: var(--cloud); padding: 26px 24px; text-align: center; font-size: .85rem; }
+  footer.site img { height: 26px; opacity: .9; display: inline-block; margin-bottom: 8px; }
+
+  .print-header { display: none; }
+  @media print {
+    @page { margin: 14mm; }
+    body { font-size: 12px; }
+    header.site, .hero, .inputs-col, .gate, footer.site, .no-print { display: none !important; }
+    .wrap { display: block; padding: 0; max-width: none; }
+    .results-col { position: static; }
+    .results-locked .results-body { filter: none; }
+    .print-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 14px; }
+    .print-header img { height: 30px; }
+    .card { box-shadow: none; border-color: #ccc; }
+    .whatif { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <img src="assets/bridge-logo-color.png" alt="Bridge Dental" />
+  <span class="pill">Educational estimate — not an appraisal</span>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">Practice Valuation</span>
+  <h1>What's my practice worth?</h1>
+  <p class="sub">Enter the numbers off your last three P&amp;Ls and see what a private buyer — or a DSO — might pay today, with the drivers behind the number explained. Edit anything; the estimate updates as you type.</p>
+  <span class="privacy-note">
+    <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    Your financials never leave this page — all the math runs in your browser.
+  </span>
+</section>
+
+<div class="wrap">
+  <!-- ============ INPUTS ============ -->
+  <div class="inputs-col">
+
+    <div class="card">
+      <h3><span class="step-num">1</span>Practice profile</h3>
+      <div class="grid2">
+        <div>
+          <label class="f" for="ptype">Practice type</label>
+          <select id="ptype">
+            <option value="gp">General dentistry</option>
+            <option value="oms">Oral surgery</option>
+            <option value="ortho">Orthodontics (estimated bands)</option>
+            <option value="pedo">Pediatric (estimated bands)</option>
+            <option value="endo">Endodontics (estimated bands)</option>
+            <option value="perio">Periodontics (estimated bands)</option>
+          </select>
+        </div>
+        <div>
+          <label class="f" for="pstate">State</label>
+          <select id="pstate"></select>
+        </div>
+      </div>
+      <div class="grid2 mt">
+        <div>
+          <label class="f">Setting</label>
+          <div class="seg" id="setting">
+            <button type="button" data-v="metro" class="on">Metro</button>
+            <button type="button" data-v="suburban">Suburban</button>
+            <button type="button" data-v="rural">Rural</button>
+          </div>
+        </div>
+        <div>
+          <label class="f" for="ops">Operatories</label>
+          <input type="number" id="ops" min="1" max="40" placeholder="e.g. 6" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="step-num">2</span>Last three years, from your P&amp;Ls</h3>
+      <div class="grid3">
+        <div>
+          <div class="fin-year" id="ylabel1">Three years ago</div>
+          <label class="f" for="c1">Collections ($)</label>
+          <input type="number" id="c1" min="0" placeholder="e.g. 950000" />
+          <label class="f mt" for="o1">Overhead (%)</label>
+          <input type="number" id="o1" min="0" max="100" placeholder="62" />
+        </div>
+        <div>
+          <div class="fin-year" id="ylabel2">Two years ago</div>
+          <label class="f" for="c2">Collections ($)</label>
+          <input type="number" id="c2" min="0" placeholder="e.g. 1020000" />
+          <label class="f mt" for="o2">Overhead (%)</label>
+          <input type="number" id="o2" min="0" max="100" placeholder="62" />
+        </div>
+        <div>
+          <div class="fin-year" id="ylabel3">Most recent year</div>
+          <label class="f" for="c3">Collections ($)</label>
+          <input type="number" id="c3" min="0" placeholder="e.g. 1100000" />
+          <label class="f mt" for="o3">Overhead (%)</label>
+          <input type="number" id="o3" min="0" max="100" placeholder="62" />
+        </div>
+      </div>
+      <p class="hint">Collections = what the practice actually collected, not production. Overhead = all practice expenses <em>except</em> what you pay yourself as the owner-doctor (include associate pay, hygiene pay, rent, supplies, labs, staff). One year is enough to start; three gives a better answer. The typical GP runs about 62% (ADA HPI mean 61.3%).</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="step-num">3</span>You and your team</h3>
+      <label class="f" for="ownerprod">Share of dentist production you personally produce <span class="range-val" id="ownerprodv">75%</span></label>
+      <input type="range" id="ownerprod" min="0" max="100" step="5" value="75" />
+      <p class="hint">Hygiene not included. If you're solo with no associates, this is usually 100%. Buyers pay less when the practice depends heavily on one doctor — it's the single best-documented driver.</p>
+      <div class="grid3 mt">
+        <div><label class="f" for="t_assoc">Associate dentists</label><input type="number" id="t_assoc" min="0" value="0" /></div>
+        <div><label class="f" for="t_hyg">Hygienists</label><input type="number" id="t_hyg" min="0" value="0" /></div>
+        <div><label class="f" for="t_asst">Assistants</label><input type="number" id="t_asst" min="0" value="0" /></div>
+        <div><label class="f" for="t_front">Front desk</label><input type="number" id="t_front" min="0" value="0" /></div>
+        <div><label class="f" for="t_mgr">Office managers</label><input type="number" id="t_mgr" min="0" value="0" /></div>
+        <div><label class="f" for="t_ins">Insurance coordinators</label><input type="number" id="t_ins" min="0" value="0" /></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="step-num">4</span>Payer mix</h3>
+      <label class="f">Fee-for-service <span class="range-val" id="ffsv">30%</span></label>
+      <input type="range" id="ffs" min="0" max="100" step="5" value="30" />
+      <label class="f mt">PPO / in-network <span class="range-val" id="ppov">60%</span></label>
+      <input type="range" id="ppo" min="0" max="100" step="5" value="60" />
+      <label class="f mt">Medicaid / HMO <span class="range-val" id="mcdv">10%</span></label>
+      <input type="range" id="mcd" min="0" max="100" step="5" value="10" />
+      <p class="hint">Rough share of collections from each. If they don't add to 100 we'll balance them for you. Buyers consistently prefer fee-for-service-heavy practices; this positions you within the range rather than changing the range itself.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="step-num">5</span>Large equipment</h3>
+      <label class="chk"><input type="checkbox" id="eq_pano" /> Panoramic X-ray</label>
+      <label class="chk"><input type="checkbox" id="eq_cbct" /> CBCT / 3D imaging</label>
+      <label class="chk"><input type="checkbox" id="eq_scan" /> Intraoral scanner(s)</label>
+      <label class="chk"><input type="checkbox" id="eq_mill" /> CAD/CAM milling unit</label>
+      <label class="chk"><input type="checkbox" id="eq_laser" /> Laser(s)</label>
+      <label class="chk mt"><input type="checkbox" id="eq_modern" /> Most of it is under 6 years old</label>
+      <p class="hint">Modern equipment means the buyer isn't facing a re-equip bill — it moves you up within the range. It doesn't stack on top as a separate line item, because buyers bake it into the price.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="step-num">6</span>One assumption you can change</h3>
+      <label class="f" for="repcomp">Replacement doctor compensation <span class="range-val" id="repcompv">30% of production</span></label>
+      <input type="range" id="repcomp" min="20" max="40" step="1" value="30" />
+      <p class="hint">To figure what the practice earns without you, buyers subtract what they'd pay a dentist to do your clinical work — the common industry rule of thumb is 28–32% of production for a GP. Adjust it if you know your market rate.</p>
+    </div>
+
+  </div>
+
+  <!-- ============ RESULTS ============ -->
+  <div class="results-col">
+    <div class="results-shell results-locked" id="shell">
+      <div class="gate no-print" id="gate">
+        <div class="gate-card">
+          <span class="eyebrow">Your estimate is ready</span>
+          <h3 style="margin-bottom:.8rem">See what your practice is worth</h3>
+          <label class="f" for="g_name">Your name</label>
+          <input type="text" id="g_name" placeholder="Dr. Jane Smith" autocomplete="name" />
+          <label class="f mt" for="g_email">Email</label>
+          <input type="email" id="g_email" placeholder="you@yourpractice.com" autocomplete="email" />
+          <button class="btn btn-primary" id="g_btn" type="button">See my estimate</button>
+          <p class="gate-note">Your financial details stay in your browser. We receive only your name, email, state, and a practice-size band — and we'll only send occasional practice-value insights.</p>
+        </div>
+      </div>
+
+      <div class="card results-body" id="results">
+        <div class="print-header">
+          <img src="assets/bridge-logo-color.png" alt="Bridge Dental" />
+          <div style="text-align:right; font-size:.8rem; color:var(--muted)">Practice Valuation Snapshot<br /><span id="printdate"></span></div>
+        </div>
+
+        <div id="emptystate" class="empty-state">
+          <svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 6-7 3 3"/><path d="M3 21h18"/></svg>
+          <p>Enter at least your most recent year's collections and overhead to see your estimate build in real time.</p>
+        </div>
+
+        <div id="resultsinner" style="display:none">
+          <span class="eyebrow">Your estimate</span>
+          <h2 id="headline">Two ways your practice gets priced</h2>
+          <p class="hint" style="margin-bottom:1rem" id="subline"></p>
+
+          <div class="track">
+            <div class="t-label">Private buyer (doctor-to-doctor) <span class="badge badge-ver">Published ranges</span></div>
+            <div class="t-value" id="t1value">—</div>
+            <div class="t-basis" id="t1basis"></div>
+            <div class="rangebar"><div class="fill" id="t1bar"></div></div>
+            <div class="rangebar-labels"><span>50% of collections</span><span>100%</span></div>
+          </div>
+
+          <div class="track">
+            <div class="t-label">DSO / private-equity buyer <span class="badge" id="t2badge"></span></div>
+            <div id="t2main">
+              <div class="t-value" id="t2value">—</div>
+              <div class="t-basis" id="t2basis"></div>
+              <div class="rangebar"><div class="fill" id="t2bar"></div></div>
+              <div class="rangebar-labels"><span id="t2lo"></span><span id="t2hi"></span></div>
+            </div>
+            <div class="notice mt" id="t2notice" style="display:none"></div>
+          </div>
+
+          <div class="narrative">
+            <h3>What's driving your number</h3>
+            <ul id="drivers"></ul>
+          </div>
+
+          <div class="whatif no-print" id="whatif" style="display:none">
+            <h3>The overhead lever</h3>
+            <p style="font-size:.9rem; margin:.2rem 0 .6rem" id="whatiflabel"></p>
+            <input type="range" id="ohtarget" min="45" max="80" step="1" />
+            <p style="font-size:.9rem; margin:.4rem 0 0">At <span class="wv" id="ohtargetv"></span> overhead, your DSO-track value becomes <span class="wv" id="whatifvalue"></span></p>
+          </div>
+
+          <div class="no-print" style="margin-top:1.2rem; display:flex; gap:10px; flex-wrap:wrap">
+            <button class="btn btn-primary" type="button" onclick="window.print()">Print my snapshot</button>
+            <a class="btn btn-secondary" href="mailto:stevegdove@gmail.com?subject=Practice%20valuation%20question">Talk it through with Steve</a>
+          </div>
+
+          <p class="disclaimer">This is an educational estimate built from published, advisor-estimated benchmark ranges — FOCUS Investment Banking (2025–26), Ad Astra Equity (2026), Auxo Capital Advisors (2026), and ADA Health Policy Institute overhead data. It is not a formal valuation, appraisal, fairness opinion, or an offer to buy, and actual sale prices vary with deal structure, real estate, payer contracts, and diligence findings. Specialty bands marked "estimated" have not been verified against transaction data. Talk to a qualified dental CPA or transition advisor before making decisions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site">
+  <img src="assets/bridge-logo-color.png" alt="Bridge Dental" /><br />
+  Built by <a href="https://bridgedental.ai">Bridge Dental</a> — less insurance busywork for dental teams.
+</footer>
+
+<script>
+/* ============================================================
+   CONFIG — Steve: everything you might want to edit lives here.
+   ============================================================ */
+
+// Paste your deployed Google Apps Script web-app URL here to capture leads.
+// Leave empty ("") while testing — the gate still unlocks, nothing is sent.
+const APPS_SCRIPT_URL = "";
+
+// Benchmarks (researched + verified 2026-07-08 — see benchmarks.md for sources).
+// Multiples ladder by ADJUSTED EBITDA size. "estimated: true" bands did NOT
+// survive fact-checking and always render with an ESTIMATED badge.
+const BENCHMARKS = {
+  // Track 1 — private buyer, % of 3-yr average collections
+  collectionsPct: { floor: 0.50, ceil: 1.00, commonLo: 0.60, commonHi: 0.80 },
+
+  // DSO buyers rarely bid below this adjusted EBITDA
+  dsoFloor: 250000,
+
+  // GP overhead norm (ADA HPI mean 61.3%)
+  overheadNorm: 62,
+
+  // EBITDA multiple ladders: [minEBITDA, maxEBITDA, loMultiple, hiMultiple]
+  ladders: {
+    gp:    { estimated: false, tiers: [[250e3,500e3,3,5],[500e3,1e6,5,7],[1e6,3e6,7,9],[3e6,5e6,9,11],[5e6,Infinity,11,13]] },
+    oms:   { estimated: false, tiers: [[250e3,500e3,3.5,5.5],[500e3,1e6,5,7],[1e6,3e6,7,9],[3e6,5e6,9,11],[5e6,Infinity,11,13]] },
+    // Estimated bands below: rough interpolation from unverified broker tables. EDIT FREELY.
+    ortho: { estimated: true,  tiers: [[250e3,500e3,3.5,5.5],[500e3,1e6,5.5,7.5],[1e6,3e6,7.5,9.5],[3e6,5e6,9.5,11],[5e6,Infinity,11,13]] },
+    pedo:  { estimated: true,  tiers: [[250e3,500e3,3.5,5.5],[500e3,1e6,5.5,7.5],[1e6,3e6,7.5,9.5],[3e6,5e6,9.5,11],[5e6,Infinity,11,13]] },
+    endo:  { estimated: true,  tiers: [[250e3,500e3,3.5,5.5],[500e3,1e6,5.5,7],[1e6,3e6,7.5,9.5],[3e6,5e6,9.5,10.5],[5e6,Infinity,10.5,12]] },
+    perio: { estimated: true,  tiers: [[250e3,500e3,3,5.5],[500e3,1e6,5,7],[1e6,3e6,7,9.5],[3e6,5e6,9,10.5],[5e6,Infinity,10,11.5]] }
+  },
+
+  // Verified: 90%+ owner production with no associates → 10–20% cut. We apply the midpoint.
+  soloDependenceHaircut: 0.85,
+
+  // Scoring weights (must sum to 1) — position WITHIN the published range.
+  // This positioning model is Bridge's; the range endpoints are the published data.
+  weights: { docDep: 0.30, growth: 0.25, payer: 0.25, location: 0.10, equipment: 0.10 }
+};
+
+const TYPE_LABELS = { gp: "general practice", oms: "oral surgery practice", ortho: "orthodontic practice", pedo: "pediatric practice", endo: "endodontic practice", perio: "periodontal practice" };
+
+/* ============================================================
+   App code below — shouldn't need edits.
+   ============================================================ */
+
+const $ = id => document.getElementById(id);
+const STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+$("pstate").innerHTML = STATES.map(s => `<option${s === "TX" ? " selected" : ""}>${s}</option>`).join("");
+
+// Year labels from the current date
+const nowYear = new Date().getFullYear();
+$("ylabel1").textContent = String(nowYear - 3);
+$("ylabel2").textContent = String(nowYear - 2);
+$("ylabel3").textContent = String(nowYear - 1) + " (most recent)";
+$("printdate").textContent = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+let setting = "metro";
+document.querySelectorAll("#setting button").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#setting button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    setting = b.dataset.v;
+    recalc();
+  });
+});
+
+const fmt$ = n => "$" + Math.round(n).toLocaleString("en-US");
+const fmtShort = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M" : "$" + Math.round(n / 1e3) + "K";
+const num = id => { const v = parseFloat($(id).value); return isFinite(v) ? v : null; };
+
+function readInputs() {
+  const years = [];
+  [["c1","o1"],["c2","o2"],["c3","o3"]].forEach(([c, o], i) => {
+    const coll = num(c);
+    if (coll && coll > 0) years.push({ idx: i, coll: coll, oh: num(o) !== null ? num(o) : BENCHMARKS.overheadNorm });
+  });
+  let ffs = num("ffs") ?? 0, ppo = num("ppo") ?? 0, mcd = num("mcd") ?? 0;
+  const tot = ffs + ppo + mcd;
+  if (tot > 0) { ffs /= tot; ppo /= tot; mcd /= tot; } else { ffs = .3; ppo = .6; mcd = .1; }
+  return {
+    type: $("ptype").value, state: $("pstate").value, setting: setting,
+    ops: num("ops"), years: years,
+    ownerProd: num("ownerprod") ?? 75, repComp: num("repcomp") ?? 30,
+    assoc: num("t_assoc") ?? 0, hyg: num("t_hyg") ?? 0,
+    team: (num("t_assoc") ?? 0) + (num("t_hyg") ?? 0) + (num("t_asst") ?? 0) + (num("t_front") ?? 0) + (num("t_mgr") ?? 0) + (num("t_ins") ?? 0),
+    ffs: ffs, ppo: ppo, mcd: mcd,
+    equip: ["eq_pano","eq_cbct","eq_scan","eq_mill","eq_laser"].filter(id => $(id).checked).length,
+    modern: $("eq_modern").checked
+  };
+}
+
+function adjEbitda(coll, ohPct, ownerProd, repComp) {
+  // collections − overhead − fair-market comp for the owner's own clinical production
+  return coll * (1 - ohPct / 100) - coll * (ownerProd / 100) * (repComp / 100);
+}
+
+function computeScore(d) {
+  const w = BENCHMARKS.weights;
+  // Growth: CAGR from first to last entered year. −5% → 0, +10% → 100.
+  let growth = 50, cagr = null;
+  if (d.years.length >= 2) {
+    const first = d.years[0], last = d.years[d.years.length - 1];
+    const span = last.idx - first.idx;
+    cagr = Math.pow(last.coll / first.coll, 1 / span) - 1;
+    growth = Math.max(0, Math.min(100, (cagr + 0.05) / 0.15 * 100));
+  }
+  // Payer: FFS best, PPO middle, Medicaid/HMO weakest (direction verified; weights are Bridge's model)
+  const payer = Math.max(0, Math.min(100, (d.ffs * 1.0 + d.ppo * 0.55 + d.mcd * 0.15) * 100));
+  // Doctor dependence: ≤40% owner share → 100, ≥95% → 0; associates add resilience
+  let docDep = Math.max(0, Math.min(100, (95 - d.ownerProd) / 55 * 100));
+  if (d.assoc > 0) docDep = Math.min(100, docDep + 15);
+  const location = { metro: 80, suburban: 60, rural: 35 }[d.setting];
+  const equipment = Math.min(100, (d.equip / 5) * 70 + (d.modern ? 30 : 0));
+  const score = w.docDep * docDep + w.growth * growth + w.payer * payer + w.location * location + w.equipment * equipment;
+  return { score, parts: { growth, payer, docDep, location, equipment }, cagr };
+}
+
+function computeTrack2(ebitda, score, type) {
+  const ladder = BENCHMARKS.ladders[type];
+  if (ebitda < BENCHMARKS.dsoFloor) return { belowFloor: true, estimated: ladder.estimated };
+  const tier = ladder.tiers.find(t => ebitda >= t[0] && ebitda < t[1]) || ladder.tiers[ladder.tiers.length - 1];
+  const [ , , lo, hi] = tier;
+  const m = lo + (score / 100) * (hi - lo);
+  const mLo = Math.max(lo, m - 0.4), mHi = Math.min(hi, m + 0.4);
+  return { belowFloor: false, estimated: ladder.estimated, tier, mLo, mHi, m,
+           vLo: ebitda * mLo, vHi: ebitda * mHi };
+}
+
+let lastBand = ""; // coarse size band sent with the lead
+
+function recalc() {
+  const d = readInputs();
+  if (d.years.length === 0) { $("emptystate").style.display = ""; $("resultsinner").style.display = "none"; return; }
+  $("emptystate").style.display = "none";
+  $("resultsinner").style.display = "";
+
+  const { score, parts, cagr } = computeScore(d);
+  const avgColl = d.years.reduce((s, y) => s + y.coll, 0) / d.years.length;
+
+  // Weighted adjusted EBITDA — most recent year counts most
+  const wts = d.years.length === 3 ? [0.2, 0.3, 0.5] : d.years.length === 2 ? [0.4, 0.6] : [1];
+  let wEbitda = 0, wColl = 0;
+  d.years.forEach((y, i) => {
+    wEbitda += wts[i] * adjEbitda(y.coll, y.oh, d.ownerProd, d.repComp);
+    wColl += wts[i] * y.coll;
+  });
+  const lastOh = d.years[d.years.length - 1].oh;
+
+  lastBand = avgColl < 750e3 ? "under $750K" : avgColl < 1.5e6 ? "$750K–1.5M" : avgColl < 3e6 ? "$1.5M–3M" : "over $3M";
+
+  // ---- Track 1: % of average collections ----
+  const C = BENCHMARKS.collectionsPct;
+  const p = C.floor + (score / 100) * (C.ceil - C.floor);
+  const pLo = Math.max(C.floor, p - 0.06), pHi = Math.min(C.ceil, p + 0.06);
+  $("t1value").textContent = fmtShort(avgColl * pLo) + " – " + fmtShort(avgColl * pHi);
+  const bandNote = pLo >= 0.80 ? "Strong fundamentals put you above the typical 60–80% closing band."
+                 : pHi <= 0.62 ? "Most deals close at 60–80%; the drivers below explain what's holding this down."
+                 : "Most deals close at 60–80%.";
+  $("t1basis").textContent = Math.round(pLo * 100) + "–" + Math.round(pHi * 100) + "% of your " + d.years.length + "-year average collections (" + fmtShort(avgColl) + "). " + bandNote;
+  $("t1bar").style.left = ((pLo - 0.5) / 0.5 * 100) + "%";
+  $("t1bar").style.width = ((pHi - pLo) / 0.5 * 100) + "%";
+
+  // ---- Track 2: EBITDA multiple ----
+  const soloDependent = d.ownerProd >= 90 && d.assoc === 0;
+  const t2 = computeTrack2(Math.max(0, wEbitda), score, d.type);
+  $("t2badge").textContent = t2.estimated ? "Estimated" : "Published ranges";
+  $("t2badge").className = "badge " + (t2.estimated ? "badge-est" : "badge-ver");
+  if (t2.belowFloor || wEbitda <= 0) {
+    $("t2main").style.display = "none";
+    $("t2notice").style.display = "";
+    $("t2notice").innerHTML = wEbitda <= 0
+      ? "At the numbers entered, adjusted EBITDA is at or below zero once a replacement doctor is paid — DSO buyers price on that figure, so the private-buyer estimate above is the realistic market."
+      : "Your adjusted EBITDA of <strong>" + fmtShort(wEbitda) + "</strong> is below the ~$250K level where DSO and private-equity buyers typically start bidding. The private-buyer estimate above is your realistic market — and growing EBITDA past $250K is what would open the second door.";
+  } else {
+    $("t2main").style.display = "";
+    $("t2notice").style.display = "none";
+    const hc = soloDependent ? BENCHMARKS.soloDependenceHaircut : 1;
+    $("t2value").textContent = fmtShort(t2.vLo * hc) + " – " + fmtShort(t2.vHi * hc);
+    $("t2basis").textContent = t2.mLo.toFixed(1) + "–" + t2.mHi.toFixed(1) + "× your adjusted EBITDA of " + fmtShort(wEbitda)
+      + (soloDependent ? ", after a 15% single-doctor-dependence reduction" : "")
+      + ". Practices your size trade at " + t2.tier[2] + "–" + (t2.tier[3] === 13 && t2.tier[1] === Infinity ? t2.tier[3] + "+" : t2.tier[3]) + "×.";
+    $("t2lo").textContent = t2.tier[2] + "× EBITDA";
+    $("t2hi").textContent = (t2.tier[1] === Infinity ? t2.tier[3] + "×+" : t2.tier[3] + "× EBITDA");
+    const bandW = t2.tier[3] - t2.tier[2];
+    $("t2bar").style.left = ((t2.mLo - t2.tier[2]) / bandW * 100) + "%";
+    $("t2bar").style.width = (Math.max(0.03, (t2.mHi - t2.mLo) / bandW) * 100) + "%";
+  }
+
+  $("subline").textContent = "Smaller practices usually sell doctor-to-doctor as a percentage of collections; once adjusted EBITDA clears ~$250K, DSO and private-equity buyers start competing on a multiple of earnings.";
+
+  // ---- Narrative ----
+  const li = [];
+  if (!t2.belowFloor && wEbitda > 0) {
+    const hcN = soloDependent ? BENCHMARKS.soloDependenceHaircut : 1;
+    const t1mid = avgColl * (pLo + pHi) / 2, t2mid = (t2.vLo + t2.vHi) / 2 * hcN;
+    if (t2mid > t1mid * 1.25) li.push("At your EBITDA, the <strong>DSO/PE track prices well above a doctor-to-doctor sale</strong> — that's where the competitive bidding happens for practices with earnings like yours.");
+    else if (t1mid > t2mid * 1.25) li.push("For your numbers, a <strong>private buyer is likely your stronger market</strong> — doctor-to-doctor pricing on collections outruns what an earnings multiple supports here.");
+  }
+  li.push("Your " + d.years.length + "-year average collections are <strong>" + fmt$(avgColl) + "</strong>, and adjusted EBITDA — what the practice earns after paying a replacement dentist " + d.repComp + "% of your production — works out to <strong>" + fmt$(Math.max(0, wEbitda)) + "</strong> (recent years weighted heavier).");
+  if (cagr !== null) {
+    const g = (cagr * 100).toFixed(1);
+    if (cagr > 0.02) li.push("Collections are growing about <strong>" + g + "% per year</strong> — growth is one of the clearest things buyers pay up for, and it's pushing you toward the top of the range.");
+    else if (cagr < -0.02) li.push("Collections are declining about <strong>" + Math.abs(g) + "% per year</strong>. Buyers discount a downward trend, so it's pulling you toward the bottom of the range — stabilizing it is the fastest way to protect value.");
+    else li.push("Collections are roughly flat year over year — steady, but buyers pay a premium for demonstrated growth.");
+  }
+  if (soloDependent) li.push("You produce <strong>" + d.ownerProd + "%</strong> of dentist production with no associates. This is the best-documented value drag: buyers typically cut 10–20% when a practice depends on one doctor, and we've applied a 15% reduction to the DSO track. Adding associate capacity is the single biggest lever you control.");
+  else if (d.ownerProd >= 70) li.push("You produce <strong>" + d.ownerProd + "%</strong> of dentist production" + (d.assoc > 0 ? " with " + d.assoc + " associate" + (d.assoc > 1 ? "s" : "") + " sharing the load" : "") + ". Reducing how much the practice depends on you personally moves the number up — it's the best-documented driver in the market data.");
+  else li.push("Only <strong>" + d.ownerProd + "%</strong> of dentist production runs through you personally — that provider depth is exactly what buyers, especially DSOs, pay a premium for.");
+  const ffsP = Math.round(d.ffs * 100), mcdP = Math.round(d.mcd * 100);
+  if (ffsP >= 50) li.push("A payer mix that's <strong>" + ffsP + "% fee-for-service</strong> is a genuine strength — buyers consistently favor FFS-heavy practices.");
+  else if (mcdP >= 30) li.push("With <strong>" + mcdP + "% Medicaid/HMO</strong> collections, expect buyers to press on reimbursement durability — it positions you lower in the range (pediatric practices are the usual exception).");
+  else li.push("Your payer mix (" + ffsP + "% FFS / " + Math.round(d.ppo * 100) + "% PPO / " + mcdP + "% Medicaid) is close to typical — not a drag, not a premium.");
+  const showWhatIf = wEbitda > 0 && lastOh > 48;
+  if (lastOh > BENCHMARKS.overheadNorm + 2) {
+    const perPoint = wColl * 0.01 * (t2.belowFloor || wEbitda <= 0 ? 4 : t2.m);
+    li.push("Overhead of <strong>" + lastOh + "%</strong> runs above the ~62% GP norm (ADA HPI: 61.3%). Every point you recover drops straight to EBITDA — worth roughly <strong>" + fmtShort(perPoint) + "</strong> of sale value per point at your multiple." + (showWhatIf ? " Try the slider below." : ""));
+  } else if (lastOh < BENCHMARKS.overheadNorm - 2) {
+    li.push("Overhead of <strong>" + lastOh + "%</strong> is leaner than the ~62% GP norm — that discipline shows up directly in your EBITDA and your multiple.");
+  }
+  if (d.equip >= 3 && d.modern) li.push("A modern equipment stack (" + d.equip + " of 5 major categories, mostly under 6 years old) means no re-equip bill for the buyer — it nudges you up within the range.");
+  else if (d.equip <= 1) li.push("Light equipment isn't a deal-breaker, but buyers price in the CBCT/scanner spend they'll face — expect it to hold you slightly lower in the range.");
+  if (d.setting === "rural") li.push("Rural practices see fewer competing buyers in doctor-to-doctor sales, which typically means a lower percentage of collections — though scarcity can work in your favor with the right DSO.");
+  if (d.ops && d.ops >= 6 && d.ownerProd >= 80) li.push("With " + d.ops + " operatories and most production running through you, there's visible unused capacity — a growth story buyers like, if you can show a plan to fill the chairs.");
+  if (t2.estimated) li.push("<strong>Note:</strong> " + TYPE_LABELS[d.type].charAt(0).toUpperCase() + TYPE_LABELS[d.type].slice(1) + " multiples are marked <em>estimated</em> — published specialty data is thinner than for GP and oral surgery, so treat the DSO track as directional.");
+  $("drivers").innerHTML = li.map(x => "<li>" + x + "</li>").join("");
+
+  // ---- Overhead what-if ----
+  if (showWhatIf) {
+    $("whatif").style.display = "";
+    if (!$("ohtarget").dataset.touched || $("ohtarget").dataset.forType !== String(lastOh)) {
+      $("ohtarget").value = lastOh; $("ohtarget").dataset.forType = String(lastOh);
+    }
+    $("whatiflabel").textContent = "You're at " + lastOh + "% overhead today. Drag to see what getting it down does to the DSO-track number.";
+    updateWhatIf(d, wEbitda, wColl, score, lastOh);
+  } else { $("whatif").style.display = "none"; }
+}
+
+function updateWhatIf(d, wEbitda, wColl, score, lastOh) {
+  const target = parseFloat($("ohtarget").value);
+  $("ohtargetv").textContent = target + "%";
+  const newEbitda = wEbitda + wColl * (lastOh - target) / 100;
+  const t2 = computeTrack2(Math.max(0, newEbitda), score, d.type);
+  const hc = (d.ownerProd >= 90 && d.assoc === 0) ? BENCHMARKS.soloDependenceHaircut : 1;
+  $("whatifvalue").textContent = (t2.belowFloor || newEbitda <= 0) ? "below the DSO floor" : fmtShort(t2.vLo * hc) + " – " + fmtShort(t2.vHi * hc);
+}
+
+// Wire up
+["ptype","pstate","ops","c1","o1","c2","o2","c3","o3","ownerprod","repcomp","t_assoc","t_hyg","t_asst","t_front","t_mgr","t_ins","ffs","ppo","mcd","eq_pano","eq_cbct","eq_scan","eq_mill","eq_laser","eq_modern"].forEach(id => {
+  $(id).addEventListener("input", recalc);
+});
+$("ohtarget").addEventListener("input", () => { $("ohtarget").dataset.touched = "1"; recalc(); });
+["ownerprod","repcomp","ffs","ppo","mcd"].forEach(id => {
+  const lbl = { ownerprod: "ownerprodv", repcomp: "repcompv", ffs: "ffsv", ppo: "ppov", mcd: "mcdv" }[id];
+  $(id).addEventListener("input", () => { $(lbl).textContent = $(id).value + "%" + (id === "repcomp" ? " of production" : ""); });
+});
+
+// ---- Email gate ----
+function unlock() { $("shell").classList.remove("results-locked"); $("gate").style.display = "none"; }
+if (localStorage.getItem("bdval_unlocked")) unlock();
+$("g_btn").addEventListener("click", () => {
+  const name = $("g_name").value.trim(), email = $("g_email").value.trim();
+  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    $("g_email").style.borderColor = "var(--rose)";
+    return;
+  }
+  if (APPS_SCRIPT_URL) {
+    // fire-and-forget; never block the owner from seeing their number
+    fetch(APPS_SCRIPT_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ name, email, state: $("pstate").value, practiceType: $("ptype").value, sizeBand: lastBand, ts: new Date().toISOString() })
+    }).catch(() => {});
+  }
+  localStorage.setItem("bdval_unlocked", "1");
+  unlock();
+});
+
+recalc();
+</script>
+</body>
+</html>
