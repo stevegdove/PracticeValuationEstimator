@@ -60,7 +60,7 @@ the sitemap in Google Search Console for fastest indexing.
 The tool never routes dentists to a personal inbox — leads flow to brokers via the Stage-2
 form. `CONTACT_EMAIL` (top of the config) is your **buy-side + privacy** address only, used by
 the "become a partner" house ad and the privacy opt-out link. Point it at a monitored business
-mailbox before launch (default is `partners@bridgedental.ai`).
+mailbox (currently `stevedove@dovedentalgroup.com`).
 
 ## Run locally
 
