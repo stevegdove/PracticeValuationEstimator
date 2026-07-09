@@ -65,6 +65,15 @@ Adjusted EBITDA = reported operating profit
 Replacement-doctor comp rule of thumb: **~28–32% of GP production** (higher for specialists).
 IMPORTANT: this figure is an industry rule of thumb from corroborating broker/CPA sources only —
 present it as such, and make it an editable field in the calculator.
+
+**Critical intake nuance (added 2026-07-09):** dentists report overhead two ways and it swings
+EBITDA enormously. Solo docs usually report overhead that **excludes** their own clinical pay
+(the ~62% norm is this convention); owners on a formal W-2 salary often report overhead that
+**includes** it. If excluded, subtract replacement comp (owner production % × repComp %) to get
+adjusted EBITDA; if included, the reported profit ≈ EBITDA already — do NOT subtract again or you
+double-count. Example: solo at 70% overhead excluding own pay is really ~100% overhead / ~$0 EBITDA
+once a replacement dentist is paid. The calculator asks this explicitly (Step 2 toggle) and the
+adjEbitda() branch depends on it.
 Sources: FOCUS Dec 2025, Auxo June 2026; corroborated by Tusk, Blue & Co (dental CPA), CT Acquisitions.
 
 ## Overhead benchmark (HIGH confidence)

@@ -89,6 +89,18 @@
   .chk { display: flex; align-items: center; gap: .55rem; font-size: .95rem; color: var(--ink); padding: .3rem 0; }
   .chk input { width: 17px; height: 17px; accent-color: var(--rose); flex: none; }
 
+  /* Overhead-method question + info popup */
+  .ohq { background: var(--lavender); border-radius: var(--radius); padding: .9rem 1rem; margin-top: 14px; }
+  .ohq .ohq-top { display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap; }
+  .ohq .ohq-q { font-family: var(--font-head); font-weight: 600; color: var(--indigo); font-size: .9rem; }
+  .info { display: inline-block; }
+  .info summary { list-style: none; cursor: pointer; width: 18px; height: 18px; border-radius: 999px; background: var(--indigo); color: #fff; font-family: var(--font-head); font-weight: 700; font-size: .72rem; line-height: 18px; text-align: center; user-select: none; }
+  .info summary::-webkit-details-marker { display: none; }
+  .info[open] summary { background: var(--rose); }
+  .info-body { font-size: .84rem; line-height: 1.5; color: var(--ink-soft); background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .8rem .9rem; margin-top: .6rem; }
+  .info-body strong { color: var(--ink); }
+  .info-body .ex { border-left: 3px solid var(--rose); padding-left: .7rem; margin-top: .5rem; }
+
   /* Results */
   .results-col { position: sticky; top: 18px; }
   .results-shell { position: relative; }
@@ -230,14 +242,35 @@
           <input type="number" id="o3" min="0" max="100" placeholder="62" />
         </div>
       </div>
-      <p class="hint">Collections = what the practice actually collected, not production. Overhead = all practice expenses <em>except</em> what you pay yourself as the owner-doctor (include associate pay, hygiene pay, rent, supplies, labs, staff). One year is enough to start; three gives a better answer. The typical GP runs about 62% (ADA HPI mean 61.3%).</p>
+      <p class="hint">Collections = what the practice actually collected, not production. One year is enough to start; three gives a better answer.</p>
+
+      <div class="ohq">
+        <div class="ohq-top">
+          <span class="ohq-q">Does that overhead % include what you pay <em>yourself</em> as the owner-doctor?</span>
+          <details class="info">
+            <summary>?</summary>
+            <div class="info-body">
+              Dentists report overhead two ways, and it changes your EBITDA a lot:
+              <div class="ex" style="margin-bottom:.4rem"><strong>Excludes your pay</strong> (common for solo docs): overhead is every cost <em>except</em> your own clinical income. The typical GP runs ~62% this way (ADA HPI mean 61.3%). We'll subtract a market-rate replacement dentist for you.</div>
+              <div class="ex"><strong>Includes your pay</strong> (common when you take a formal W-2 salary): your compensation is already inside the overhead figure, so what's left is closer to true profit. We won't subtract it again.</div>
+              <div class="ex" style="border-color:var(--indigo)"><strong>Why it matters:</strong> say you're solo at "70% overhead / 30% profit" but never counted your own pay. A buyer pays a dentist ~30% of production to replace you — so your real EBITDA is near <strong>zero</strong>, i.e. ~100% overhead. Getting this right is the difference between a real DSO offer and none.</div>
+            </div>
+          </details>
+        </div>
+        <div class="seg mt" id="ohincl">
+          <button type="button" data-v="excl" class="on">No — excludes my pay</button>
+          <button type="button" data-v="incl">Yes — includes my pay</button>
+        </div>
+      </div>
+
+      <label class="f mt" for="ownerprod">Share of dentist production you personally produce <span class="range-val" id="ownerprodv">75%</span></label>
+      <input type="range" id="ownerprod" min="0" max="100" step="5" value="75" />
+      <p class="hint" id="ownerprodhint">Hygiene not included. If you're solo with no associates, this is usually 100%. This tells us how much of the practice leans on you — the single best-documented value driver — and, when your pay is excluded above, how big a replacement-dentist cost to subtract.</p>
     </div>
 
     <div class="card">
-      <h3><span class="step-num">3</span>You and your team</h3>
-      <label class="f" for="ownerprod">Share of dentist production you personally produce <span class="range-val" id="ownerprodv">75%</span></label>
-      <input type="range" id="ownerprod" min="0" max="100" step="5" value="75" />
-      <p class="hint">Hygiene not included. If you're solo with no associates, this is usually 100%. Buyers pay less when the practice depends heavily on one doctor — it's the single best-documented driver.</p>
+      <h3><span class="step-num">3</span>Your team</h3>
+      <p class="hint" style="margin-top:0">How many people, by role. This feeds the doctor-dependence read and flags staffing outliers.</p>
       <div class="grid3 mt">
         <div><label class="f" for="t_assoc">Associate dentists</label><input type="number" id="t_assoc" min="0" value="0" /></div>
         <div><label class="f" for="t_hyg">Hygienists</label><input type="number" id="t_hyg" min="0" value="0" /></div>
@@ -270,11 +303,11 @@
       <p class="hint">Modern equipment means the buyer isn't facing a re-equip bill — it moves you up within the range. It doesn't stack on top as a separate line item, because buyers bake it into the price.</p>
     </div>
 
-    <div class="card">
+    <div class="card" id="repcompcard">
       <h3><span class="step-num">6</span>One assumption you can change</h3>
       <label class="f" for="repcomp">Replacement doctor compensation <span class="range-val" id="repcompv">30% of production</span></label>
       <input type="range" id="repcomp" min="20" max="40" step="1" value="30" />
-      <p class="hint">To figure what the practice earns without you, buyers subtract what they'd pay a dentist to do your clinical work — the common industry rule of thumb is 28–32% of production for a GP. Adjust it if you know your market rate.</p>
+      <p class="hint" id="repcomphint">To figure what the practice earns without you, buyers subtract what they'd pay a dentist to do your clinical work — the common industry rule of thumb is 28–32% of production for a GP. Adjust it if you know your market rate.</p>
     </div>
 
   </div>
@@ -418,14 +451,19 @@ $("ylabel3").textContent = String(nowYear - 1) + " (most recent)";
 $("printdate").textContent = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
 let setting = "metro";
-document.querySelectorAll("#setting button").forEach(b => {
-  b.addEventListener("click", () => {
-    document.querySelectorAll("#setting button").forEach(x => x.classList.remove("on"));
-    b.classList.add("on");
-    setting = b.dataset.v;
-    recalc();
+let ohIncl = "excl"; // "excl" = overhead excludes owner-doctor pay (default); "incl" = includes it
+function wireSeg(groupId, onPick) {
+  document.querySelectorAll("#" + groupId + " button").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#" + groupId + " button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      onPick(b.dataset.v);
+      recalc();
+    });
   });
-});
+}
+wireSeg("setting", v => setting = v);
+wireSeg("ohincl", v => ohIncl = v);
 
 const fmt$ = n => "$" + Math.round(n).toLocaleString("en-US");
 const fmtShort = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M" : "$" + Math.round(n / 1e3) + "K";
@@ -442,6 +480,7 @@ function readInputs() {
   if (tot > 0) { ffs /= tot; ppo /= tot; mcd /= tot; } else { ffs = .3; ppo = .6; mcd = .1; }
   return {
     type: $("ptype").value, state: $("pstate").value, setting: setting,
+    ohIncl: ohIncl === "incl",
     ops: num("ops"), years: years,
     ownerProd: num("ownerprod") ?? 75, repComp: num("repcomp") ?? 30,
     assoc: num("t_assoc") ?? 0, hyg: num("t_hyg") ?? 0,
@@ -452,9 +491,14 @@ function readInputs() {
   };
 }
 
-function adjEbitda(coll, ohPct, ownerProd, repComp) {
-  // collections − overhead − fair-market comp for the owner's own clinical production
-  return coll * (1 - ohPct / 100) - coll * (ownerProd / 100) * (repComp / 100);
+function adjEbitda(coll, ohPct, ownerProd, repComp, ohIncl) {
+  const profit = coll * (1 - ohPct / 100);
+  // If the reported overhead ALREADY includes the owner-doctor's pay, the profit
+  // figure is essentially EBITDA — don't subtract a replacement dentist again.
+  if (ohIncl) return profit;
+  // Otherwise overhead excludes owner pay, so subtract a market-rate replacement
+  // dentist for the owner's own clinical production to get transferable EBITDA.
+  return profit - coll * (ownerProd / 100) * (repComp / 100);
 }
 
 function computeScore(d) {
@@ -497,6 +541,12 @@ function recalc() {
   $("emptystate").style.display = "none";
   $("resultsinner").style.display = "";
 
+  // Step 6 (replacement comp) only affects EBITDA when overhead excludes owner pay.
+  $("repcompcard").style.opacity = d.ohIncl ? ".55" : "1";
+  $("repcomphint").textContent = d.ohIncl
+    ? "Not in play right now — you told us your overhead already includes your own pay, so there's no separate replacement-dentist cost to subtract. Switch Step 2 to \"excludes my pay\" and this comes back into effect."
+    : "To figure what the practice earns without you, buyers subtract what they'd pay a dentist to do your clinical work — the common industry rule of thumb is 28–32% of production for a GP. Adjust it if you know your market rate.";
+
   const { score, parts, cagr } = computeScore(d);
   const avgColl = d.years.reduce((s, y) => s + y.coll, 0) / d.years.length;
 
@@ -504,7 +554,7 @@ function recalc() {
   const wts = d.years.length === 3 ? [0.2, 0.3, 0.5] : d.years.length === 2 ? [0.4, 0.6] : [1];
   let wEbitda = 0, wColl = 0;
   d.years.forEach((y, i) => {
-    wEbitda += wts[i] * adjEbitda(y.coll, y.oh, d.ownerProd, d.repComp);
+    wEbitda += wts[i] * adjEbitda(y.coll, y.oh, d.ownerProd, d.repComp, d.ohIncl);
     wColl += wts[i] * y.coll;
   });
   const lastOh = d.years[d.years.length - 1].oh;
@@ -532,7 +582,7 @@ function recalc() {
     $("t2main").style.display = "none";
     $("t2notice").style.display = "";
     $("t2notice").innerHTML = wEbitda <= 0
-      ? "At the numbers entered, adjusted EBITDA is at or below zero once a replacement doctor is paid — DSO buyers price on that figure, so the private-buyer estimate above is the realistic market."
+      ? "At the numbers entered, adjusted EBITDA is at or below zero" + (d.ohIncl ? "" : " once a replacement doctor is paid") + " — DSO buyers price on that figure, so the private-buyer estimate above is the realistic market." + (d.ohIncl ? "" : " If your overhead figure already includes your own pay, switch the toggle in Step 2 — it will lift this substantially.")
       : "Your adjusted EBITDA of <strong>" + fmtShort(wEbitda) + "</strong> is below the ~$250K level where DSO and private-equity buyers typically start bidding. The private-buyer estimate above is your realistic market — and growing EBITDA past $250K is what would open the second door.";
   } else {
     $("t2main").style.display = "";
@@ -559,7 +609,12 @@ function recalc() {
     if (t2mid > t1mid * 1.25) li.push("At your EBITDA, the <strong>DSO/PE track prices well above a doctor-to-doctor sale</strong> — that's where the competitive bidding happens for practices with earnings like yours.");
     else if (t1mid > t2mid * 1.25) li.push("For your numbers, a <strong>private buyer is likely your stronger market</strong> — doctor-to-doctor pricing on collections outruns what an earnings multiple supports here.");
   }
-  li.push("Your " + d.years.length + "-year average collections are <strong>" + fmt$(avgColl) + "</strong>, and adjusted EBITDA — what the practice earns after paying a replacement dentist " + d.repComp + "% of your production — works out to <strong>" + fmt$(Math.max(0, wEbitda)) + "</strong> (recent years weighted heavier).");
+  const ebitdaBasis = d.ohIncl
+    ? "adjusted EBITDA — profit after your overhead, which you told us already includes your own pay — works out to"
+    : "adjusted EBITDA — what the practice earns after paying a replacement dentist " + d.repComp + "% of your production — works out to";
+  li.push("Your " + d.years.length + "-year average collections are <strong>" + fmt$(avgColl) + "</strong>, and " + ebitdaBasis + " <strong>" + fmt$(Math.max(0, wEbitda)) + "</strong> (recent years weighted heavier).");
+  if (d.ohIncl && d.ownerProd >= 90)
+    li.push("Because your overhead already includes your pay, we treat that profit as EBITDA directly. Double-check that what you pay yourself is near a market rate (~" + d.repComp + "% of production) — if you pay yourself well above market, a buyer would add the excess back and your real number is higher.");
   if (cagr !== null) {
     const g = (cagr * 100).toFixed(1);
     if (cagr > 0.02) li.push("Collections are growing about <strong>" + g + "% per year</strong> — growth is one of the clearest things buyers pay up for, and it's pushing you toward the top of the range.");
