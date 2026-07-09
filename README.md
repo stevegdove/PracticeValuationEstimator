@@ -36,10 +36,31 @@ similar), and the consent checkbox is your basis for the broker referrals.
 
 | File | What it is |
 |---|---|
-| `index.html` | The whole app — page, styles, config, calculator |
+| `index.html` | The whole app — page, styles, config, calculator, SEO |
 | `benchmarks.md` | Researched + verified valuation benchmarks with citations (July 2026) |
 | `apps-script.gs` | Google Apps Script that receives leads into a Sheet |
+| `robots.txt`, `sitemap.xml` | SEO crawl files |
+| `assets/og-card.png` | 1200×630 social share image (regenerate with `python3 /tmp/ogcard.py` style script) |
 | `assets/` | Bridge logos + favicon |
+
+## SEO
+
+Built in: keyword-optimized title + meta description, canonical URL, Open Graph +
+Twitter cards with a branded share image, JSON-LD structured data (WebApplication +
+**FAQPage** for rich results + Organization), a crawlable on-page FAQ/content section,
+`robots.txt`, and `sitemap.xml`.
+
+**If you move to a custom domain** (e.g. bridgedental.ai/valuation), find-and-replace
+`https://stevegdove.github.io/PracticeValuationEstimator/` across `index.html` (canonical,
+og:url, og:image, twitter:image, JSON-LD `url`), `robots.txt`, and `sitemap.xml`. Then submit
+the sitemap in Google Search Console for fastest indexing.
+
+## Contact / no personal info
+
+The tool never routes dentists to a personal inbox — leads flow to brokers via the Stage-2
+form. `CONTACT_EMAIL` (top of the config) is your **buy-side + privacy** address only, used by
+the "become a partner" house ad and the privacy opt-out link. Point it at a monitored business
+mailbox before launch (default is `partners@bridgedental.ai`).
 
 ## Run locally
 

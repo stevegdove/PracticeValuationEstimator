@@ -3,9 +3,99 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>What's My Practice Worth? — Bridge Dental</title>
-<meta name="description" content="A free, private valuation estimator for dental practice owners. Enter numbers from your last three P&Ls and see what a private buyer or a DSO might pay — with the drivers explained." />
+
+<!-- ============================================================
+     SEO. If you move this to a custom domain (e.g. bridgedental.ai),
+     find-and-replace the base URL below in the canonical, og:url,
+     og:image, twitter:image, JSON-LD "url", robots.txt, and sitemap.xml.
+     ============================================================ -->
+<title>What's My Dental Practice Worth? Free Valuation Calculator (2026)</title>
+<meta name="description" content="Free dental practice valuation calculator: estimate your practice's value as a % of collections or a DSO/PE EBITDA multiple, with the drivers explained. Your financials never leave your browser." />
+<link rel="canonical" href="https://stevegdove.github.io/PracticeValuationEstimator/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="theme-color" content="#3A1F6E" />
+<meta name="author" content="Bridge Dental" />
 <link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/favicon.png" />
+
+<!-- Open Graph (Facebook, LinkedIn, iMessage…) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Bridge Dental" />
+<meta property="og:title" content="What's My Dental Practice Worth? Free Valuation Calculator" />
+<meta property="og:description" content="Estimate your dental practice's value in minutes — private-buyer % of collections and DSO/PE EBITDA multiples, with the drivers explained. Free, and your financials never leave your browser." />
+<meta property="og:url" content="https://stevegdove.github.io/PracticeValuationEstimator/" />
+<meta property="og:image" content="https://stevegdove.github.io/PracticeValuationEstimator/assets/og-card.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="What's my practice worth? — free dental practice valuation calculator by Bridge Dental" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="What's My Dental Practice Worth? Free Valuation Calculator" />
+<meta name="twitter:description" content="Estimate your dental practice's value — private-buyer % of collections and DSO/PE EBITDA multiples. Free; your financials never leave your browser." />
+<meta name="twitter:image" content="https://stevegdove.github.io/PracticeValuationEstimator/assets/og-card.png" />
+
+<!-- Structured data: the tool, the FAQ (rich results), and the publisher -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "What's My Practice Worth? — Dental Practice Valuation Calculator",
+      "url": "https://stevegdove.github.io/PracticeValuationEstimator/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any (web browser)",
+      "browserRequirements": "Requires JavaScript",
+      "description": "Free calculator that estimates a US dental practice's sale value two ways — as a percentage of collections for a private (doctor-to-doctor) sale, and as a multiple of adjusted EBITDA for DSO/private-equity buyers — using current 2025–2026 broker benchmarks. All calculations run client-side; no financial data is transmitted.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@type": "Organization", "name": "Bridge Dental", "url": "https://bridgedental.ai" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much is a dental practice worth?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Most US general dental practices sell doctor-to-doctor for roughly 50–100% of average annual collections, with 60–80% the most common range. Larger practices that attract DSO or private-equity buyers are instead priced on a multiple of adjusted EBITDA, typically 5–7x under $1M of EBITDA and rising to 9–11x or more at $3M+." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you value a dental practice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "There are two main methods. Private buyers value a practice as a percentage of its average annual collections. DSO and private-equity buyers value it as a multiple of adjusted EBITDA — profit after normalizing the owner-dentist's pay to a market clinical rate (about 28–32% of production for a GP) and adding back discretionary expenses. Payer mix, growth, doctor dependence, and equipment then position the practice within the range." }
+        },
+        {
+          "@type": "Question",
+          "name": "What multiple of EBITDA do dental practices sell for?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Adjusted-EBITDA multiples ladder with size: roughly 3–5x under $500K of EBITDA, 5–7x from $500K–$1M, 7–9x from $1M–$3M, 9–11x from $3M–$5M, and 11x or more above $5M. Practices below about $250K of EBITDA usually fall outside the DSO buyer pool and sell as a percentage of collections instead." }
+        },
+        {
+          "@type": "Question",
+          "name": "What percentage of collections does a dental practice sell for?",
+          "acceptedAnswer": { "@type": "Answer", "text": "In doctor-to-doctor sales, general dental practices commonly sell for 60–80% of average annual collections, within a broader 50–100% range. Fee-for-service-heavy practices, strong growth, and low reliance on a single doctor push toward the top of the range." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do DSOs pay more than private buyers for a dental practice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Often, yes — but only once a practice is large enough. Below roughly $250K of adjusted EBITDA, DSOs rarely bid and a private doctor-to-doctor sale is the realistic market. Above that, DSO and private-equity buyers competing on an EBITDA multiple frequently pay more than a private buyer would, especially for practices with associate depth and clean financials." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a typical overhead percentage for a dental practice?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A US general dental practice runs about 62% overhead on average (the ADA Health Policy Institute reports a 61.3% mean), with 55–65% a healthy range. This figure conventionally excludes the owner-dentist's own compensation. Lowering overhead flows directly to EBITDA and can meaningfully raise a DSO-track valuation." }
+        }
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Bridge Dental",
+      "url": "https://bridgedental.ai",
+      "logo": "https://stevegdove.github.io/PracticeValuationEstimator/assets/bridge-logo-color.png"
+    }
+  ]
+}
+</script>
+
 <script data-goatcounter="https://bridgedental.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -173,6 +263,26 @@
   .empty-state svg { width: 40px; height: 40px; stroke: var(--muted); fill: none; stroke-width: 1.6; stroke-linecap: round; margin-bottom: .6rem; }
 
   .disclaimer { font-size: .78rem; color: var(--muted); line-height: 1.55; margin-top: 16px; }
+
+  /* SEO content section */
+  .seo-content { background: var(--lavender); padding: 48px 24px 56px; }
+  .seo-inner { max-width: 880px; margin: 0 auto; }
+  .seo-inner h2 { margin-top: 0; font-size: clamp(1.4rem, 3vw, 1.9rem); }
+  .seo-inner > p { font-size: 1.02rem; max-width: 720px; }
+  .seo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 22px 0 40px; }
+  @media (max-width: 680px) { .seo-grid { grid-template-columns: 1fr; } }
+  .seo-grid > div { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem 1.4rem; }
+  .seo-grid h3 { color: var(--indigo); }
+  .seo-grid p { font-size: .93rem; margin-bottom: 0; }
+  .faq { margin-top: 14px; }
+  .faq details { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .3rem 1rem; margin-bottom: 10px; }
+  .faq summary { list-style: none; cursor: pointer; font-family: var(--font-head); font-weight: 600; color: var(--ink); padding: .7rem 0; position: relative; padding-right: 28px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; color: var(--rose); font-weight: 400; }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { margin: 0 0 .9rem; font-size: .93rem; }
+  .seo-foot { font-size: .8rem; color: var(--muted); margin-top: 24px; max-width: 720px; }
+
   footer.site { background: var(--cloud); padding: 26px 24px; text-align: center; font-size: .85rem; }
   footer.site img { height: 26px; opacity: .9; display: inline-block; margin-bottom: 8px; }
 
@@ -465,7 +575,7 @@
 
           <div class="no-print" style="margin-top:1.2rem; display:flex; gap:10px; flex-wrap:wrap">
             <button class="btn btn-primary" type="button" onclick="window.print()">Print my snapshot</button>
-            <a class="btn btn-secondary" href="mailto:stevegdove@gmail.com?subject=Practice%20valuation%20question">Talk it through with Steve</a>
+            <button class="btn btn-secondary" type="button" id="scrollbroker">Get a broker's valuation</button>
           </div>
 
           <!-- Recommended partners (direct-sold, clearly-labeled sponsor slots) -->
@@ -477,6 +587,37 @@
     </div>
   </div>
 </div>
+
+<!-- SEO content: crawlable, keyword-rich, and genuinely useful. Mirrors the FAQ schema. -->
+<section class="seo-content no-print">
+  <div class="seo-inner">
+    <span class="eyebrow">The 60-second version</span>
+    <h2>How dental practices are valued in 2026</h2>
+    <p>There are two buyers for a dental practice, and they price it two different ways. Knowing which one fits your practice is most of the battle — this free calculator estimates both.</p>
+
+    <div class="seo-grid">
+      <div>
+        <h3>Private buyer — a percentage of collections</h3>
+        <p>Another dentist buying your practice typically pays <strong>50–100% of your average annual collections</strong>, with <strong>60–80%</strong> the most common range. This is the realistic market for most practices under about $1.5M in collections. Fee-for-service revenue, steady growth, and a practice that doesn't depend entirely on one dentist all push you toward the top of that range.</p>
+      </div>
+      <div>
+        <h3>DSO / private equity — a multiple of EBITDA</h3>
+        <p>Larger practices attract DSO and private-equity buyers, who pay a <strong>multiple of adjusted EBITDA</strong> — your profit after paying a replacement dentist a market rate (about 28–32% of production) and adding back discretionary costs. Multiples ladder with size: roughly <strong>5–7× under $1M, 7–9× at $1–3M, and 9–11×+ above $3M</strong>. Below ~$250K of EBITDA, DSOs rarely bid.</p>
+      </div>
+    </div>
+
+    <h2 id="faq">Dental practice valuation — frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>How much is a dental practice worth?</summary><p>Most US general dental practices sell doctor-to-doctor for roughly 50–100% of average annual collections, with 60–80% most common. Larger practices that attract DSO or private-equity buyers are priced on a multiple of adjusted EBITDA — typically 5–7× under $1M of EBITDA, rising to 9–11× or more at $3M+.</p></details>
+      <details><summary>How do you value a dental practice?</summary><p>Two main methods. Private buyers value a practice as a percentage of average annual collections. DSO and private-equity buyers value it as a multiple of adjusted EBITDA — profit after normalizing the owner-dentist's pay to a market clinical rate (about 28–32% of production for a GP) and adding back discretionary expenses. Payer mix, growth, doctor dependence, and equipment then position the practice within the range.</p></details>
+      <details><summary>What multiple of EBITDA do dental practices sell for?</summary><p>Adjusted-EBITDA multiples ladder with size: roughly 3–5× under $500K of EBITDA, 5–7× from $500K–$1M, 7–9× from $1M–$3M, 9–11× from $3M–$5M, and 11× or more above $5M. Practices below about $250K of EBITDA usually sell as a percentage of collections instead.</p></details>
+      <details><summary>What percentage of collections does a dental practice sell for?</summary><p>In doctor-to-doctor sales, general dental practices commonly sell for 60–80% of average annual collections, within a broader 50–100% range. Fee-for-service-heavy practices, strong growth, and low reliance on a single doctor push toward the top.</p></details>
+      <details><summary>Do DSOs pay more than private buyers?</summary><p>Often, but only once a practice is large enough. Below roughly $250K of adjusted EBITDA, DSOs rarely bid and a private sale is the realistic market. Above that, DSO and private-equity buyers competing on an EBITDA multiple frequently pay more — especially for practices with associate depth and clean financials.</p></details>
+      <details><summary>What is a typical overhead percentage for a dental practice?</summary><p>A US general dental practice runs about 62% overhead on average (ADA Health Policy Institute reports a 61.3% mean), with 55–65% a healthy range — conventionally excluding the owner-dentist's own pay. Lowering overhead flows straight to EBITDA and can meaningfully raise a DSO-track valuation.</p></details>
+    </div>
+    <p class="seo-foot">Ranges reflect 2025–2026 benchmarks from dental M&amp;A advisors (FOCUS Investment Banking, Ad Astra Equity, Auxo Capital Advisors) and ADA Health Policy Institute overhead data. This tool is an educational estimate, not a formal valuation or an offer to buy.</p>
+  </div>
+</section>
 
 <footer class="site">
   <div id="partnerstrip"></div>
@@ -490,7 +631,7 @@
     <h3>Privacy &amp; how we use your info</h3>
     <p style="font-size:.9rem"><strong>Your practice financials never leave your browser.</strong> Every calculation runs on your own device — collections, overhead, and EBITDA are never transmitted or stored by us.</p>
     <p style="font-size:.9rem">When you unlock your estimate we collect your name, email, state, and a broad practice-size band so we can send your snapshot and occasional insights.</p>
-    <p style="font-size:.9rem">If you choose <em>"Connect me with a broker,"</em> you're asking us to introduce you — and you agree we may share the contact details and practice profile you provide with a vetted dental transition partner, who may contact you by phone or email. You can opt out or ask us to delete your information anytime at <a href="mailto:stevegdove@gmail.com">stevegdove@gmail.com</a>.</p>
+    <p style="font-size:.9rem">If you choose <em>"Connect me with a broker,"</em> you're asking us to introduce you — and you agree we may share the contact details and practice profile you provide with a vetted dental transition partner, who may contact you by phone or email. You can opt out or ask us to delete your information anytime at <a href="#" id="privemail">our privacy inbox</a>.</p>
     <p style="font-size:.9rem">The page carries paid sponsorships from brokers and dental vendors; these are always labeled "Sponsored." A sponsor placement is not an endorsement.</p>
     <button class="btn btn-primary" type="button" id="privclose" style="margin-top:.5rem">Got it</button>
   </div>
@@ -498,12 +639,17 @@
 
 <script>
 /* ============================================================
-   CONFIG — Steve: everything you might want to edit lives here.
+   CONFIG — everything you might want to edit lives here.
    ============================================================ */
 
 // Paste your deployed Google Apps Script web-app URL here to capture leads.
 // Leave empty ("") while testing — the gate still unlocks, nothing is sent.
 const APPS_SCRIPT_URL = "";
+
+// Business inbox for BROKER / ADVERTISER inquiries and privacy/opt-out requests.
+// This is NOT shown to dentists as a "contact us" — it's your buy-side + legal
+// address. Point it at a monitored mailbox you control (not a personal one).
+const CONTACT_EMAIL = "partners@bridgedental.ai";
 
 // ---- SPONSORS: direct-sold, clearly-labeled partner slots ----
 // Add a paid sponsor by dropping an object in here. `logo` = 1–3 initials.
@@ -526,8 +672,8 @@ const SPONSORS = [
 // (or none match the visitor's state). Edit the contact link to your sales inbox.
 const HOUSE_AD = {
   html: 'Reach dentists <strong>at the moment they\'re valuing their practice.</strong> ' +
-        'Advertise here or get referred qualified seller leads → ' +
-        '<a href="mailto:stevegdove@gmail.com?subject=Advertising%20on%20the%20valuation%20tool">talk to us</a>.'
+        'Advertise here or receive qualified seller leads → ' +
+        '<a href="mailto:' + CONTACT_EMAIL + '?subject=Advertising%20on%20the%20valuation%20tool">become a partner</a>.'
 };
 
 // Benchmarks (researched + verified 2026-07-08 — see benchmarks.md for sources).
@@ -943,7 +1089,16 @@ function renderSponsors() {
 $("pstate").addEventListener("change", renderSponsors);
 renderSponsors();
 
+// "Get a broker's valuation" secondary button → focus the broker form
+$("scrollbroker").addEventListener("click", () => {
+  const cta = $("brokercta");
+  if (cta.style.display === "none") { $("brokerthanks").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+  cta.scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => $("bk_timeline").focus(), 400);
+});
+
 // ---- Privacy modal ----
+$("privemail").href = "mailto:" + CONTACT_EMAIL + "?subject=Privacy%20request";
 $("privlink").addEventListener("click", e => { e.preventDefault(); $("privmodal").style.display = "flex"; });
 $("privclose").addEventListener("click", () => { $("privmodal").style.display = "none"; });
 $("privmodal").addEventListener("click", e => { if (e.target === $("privmodal")) $("privmodal").style.display = "none"; });
