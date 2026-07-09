@@ -1,15 +1,36 @@
 # What's My Practice Worth? — valuation estimator
 
-A single-page, client-side valuation estimator for dental practice owners.
-Owner enters numbers from their last three P&Ls; the page shows a live,
-mortgage-calculator-style estimate two ways — private buyer (% of collections)
-and DSO/PE (multiple of adjusted EBITDA) — with a plain-English narrative.
+A single-page, client-side valuation estimator for dental practice owners that
+doubles as a **lead-generation funnel**. Owner enters numbers from their last
+three P&Ls; the page shows a live, mortgage-calculator-style estimate two ways —
+private buyer (% of collections) and DSO/PE (multiple of adjusted EBITDA) — with
+a plain-English narrative.
 
 - **All math runs in the browser.** No financials are ever transmitted.
-- Results sit behind an email gate; leads go to a Google Sheet via Apps Script.
+- **Two-stage capture:** an email gate unlocks the estimate (your nurture list),
+  then a high-intent "Connect me with a broker" form captures timeline, phone,
+  and consent — these are the sellable, broker-ready leads. Both land in one
+  Google Sheet via Apps Script, tagged by lead type.
+- **Direct-sold sponsorships:** a "Recommended partners" section + footer strip,
+  driven by the editable `SPONSORS` config. Geo-target a broker by state; when no
+  paid sponsor matches, a house "advertise here" slot shows instead.
 - Benchmark ranges and scoring weights live in the `BENCHMARKS` config block
   at the top of the `<script>` in `index.html` — edit numbers there, no code
   knowledge needed. Sources and confidence levels: `benchmarks.md`.
+
+## Monetization config (edit in `index.html`)
+
+- **`SPONSORS`** — add a paid placement: `{ name, tag, logo, blurb, url, states?, strip? }`.
+  Omit `states` to show everywhere; add e.g. `states: ["TX","AZ"]` to show a broker
+  only to visitors in those states. `strip: true` also lists them in the footer.
+- **`HOUSE_AD`** — the fallback "advertise here" slot shown when no sponsor matches.
+- Leads: the Sheet gets a `Lead type` column — `estimate` (gate) vs `broker`
+  (consented, high-intent). Sell/route the `broker` rows.
+
+**Before selling leads:** the gate + broker consent copy and the in-page privacy
+modal are written to disclose broker sharing and paid sponsorships honestly. Keep
+them — selling contacts legally counts as a "sale of personal data" (CCPA and
+similar), and the consent checkbox is your basis for the broker referrals.
 
 ## Files
 
