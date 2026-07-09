@@ -294,17 +294,46 @@
 
     <div class="card">
       <h3><span class="step-num">5</span>Large equipment</h3>
-      <label class="chk"><input type="checkbox" id="eq_pano" /> Panoramic X-ray</label>
-      <label class="chk"><input type="checkbox" id="eq_cbct" /> CBCT / 3D imaging</label>
-      <label class="chk"><input type="checkbox" id="eq_scan" /> Intraoral scanner(s)</label>
-      <label class="chk"><input type="checkbox" id="eq_mill" /> CAD/CAM milling unit</label>
-      <label class="chk"><input type="checkbox" id="eq_laser" /> Laser(s)</label>
-      <label class="chk mt"><input type="checkbox" id="eq_modern" /> Most of it is under 6 years old</label>
-      <p class="hint">Modern equipment means the buyer isn't facing a re-equip bill — it moves you up within the range. It doesn't stack on top as a separate line item, because buyers bake it into the price.</p>
+      <div id="equiplist"></div>
+      <label class="chk mt"><input type="checkbox" id="eq_modern" /> Most of it — including operatory chairs — is under ~6 years old</label>
+      <p class="hint">Check what the practice owns. Modern equipment means the buyer isn't facing a re-equip bill, so it moves you up within the range — it doesn't stack on top as a separate line item, because buyers bake it into the price. The list adjusts to your practice type.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="step-num">6</span>Facility &amp; curb appeal</h3>
+      <div class="grid2">
+        <div>
+          <label class="f" for="fac_condition">Office condition</label>
+          <select id="fac_condition">
+            <option value="good" selected>Well-kept, updated in last 5–10 yrs</option>
+            <option value="new">Remodeled / built out in last 5 yrs</option>
+            <option value="dated">Dated but functional</option>
+            <option value="poor">Tired — needs work</option>
+          </select>
+        </div>
+        <div>
+          <label class="f" for="fac_visibility">Location visibility</label>
+          <select id="fac_visibility">
+            <option value="mod" selected>Moderate — some passing traffic</option>
+            <option value="high">High — major road, strong signage</option>
+            <option value="low">Low — tucked away / office park interior</option>
+          </select>
+        </div>
+      </div>
+      <label class="chk mt"><input type="checkbox" id="fac_prominent" /> Freestanding or landmark building (the office is its own advertisement)</label>
+      <div class="mt">
+        <label class="f" for="fac_realestate">The building is…</label>
+        <select id="fac_realestate">
+          <option value="lease" selected>Leased</option>
+          <option value="leaselong">Leased on a long, favorable term</option>
+          <option value="own">Owned by me / the practice</option>
+        </select>
+      </div>
+      <p class="hint">A turnkey, attractive office on a visible road generates its own new patients and spares the buyer a remodel — both push you up within the range. Owning the building doesn't change the practice's value, but it's a separate asset you could sell or lease back; we'll note it rather than price it here.</p>
     </div>
 
     <div class="card" id="repcompcard">
-      <h3><span class="step-num">6</span>One assumption you can change</h3>
+      <h3><span class="step-num">7</span>One assumption you can change</h3>
       <label class="f" for="repcomp">Replacement doctor compensation <span class="range-val" id="repcompv">30% of production</span></label>
       <input type="range" id="repcomp" min="20" max="40" step="1" value="30" />
       <p class="hint" id="repcomphint">To figure what the practice earns without you, buyers subtract what they'd pay a dentist to do your clinical work — the common industry rule of thumb is 28–32% of production for a GP. Adjust it if you know your market rate.</p>
@@ -430,7 +459,39 @@ const BENCHMARKS = {
 
   // Scoring weights (must sum to 1) — position WITHIN the published range.
   // This positioning model is Bridge's; the range endpoints are the published data.
-  weights: { docDep: 0.30, growth: 0.25, payer: 0.25, location: 0.10, equipment: 0.10 }
+  // Doc-dependence / growth / payer are the researched drivers; equipment, location,
+  // and facility are lighter "direction-only" nudges (see benchmarks.md).
+  weights: { docDep: 0.28, growth: 0.24, payer: 0.24, location: 0.08, equipment: 0.08, facility: 0.08 },
+
+  // Equipment normalization target: sum of item weights that reads as "fully modern,
+  // no re-equip bill." ~CBCT + scanner + mill + sensors gets you there. EDIT FREELY.
+  equipTarget: 7
+};
+
+// Large-equipment catalog. `w` = how strongly it signals "no re-equip bill for the
+// buyer." `types: "all"` shows for every practice; an array shows only for those
+// practice types (specialty-adaptive). Edit labels/weights or add rows freely.
+const EQUIPMENT = [
+  { id: "cbct",     label: "CBCT / 3D cone beam imaging",              w: 3,   types: "all" },
+  { id: "pano",     label: "Panoramic X-ray",                          w: 1,   types: "all" },
+  { id: "scan",     label: "Intraoral scanner(s) (iTero, Trios…)",     w: 1.5, types: "all" },
+  { id: "mill",     label: "CAD/CAM milling unit (CEREC…)",            w: 2,   types: "all" },
+  { id: "printer",  label: "In-office 3D printer",                     w: 1.5, types: "all" },
+  { id: "sensors",  label: "Digital X-ray sensors",                    w: 1,   types: "all" },
+  { id: "hlaser",   label: "Hard-tissue / all-tissue laser (Solea, Waterlase)", w: 2, types: "all" },
+  { id: "slaser",   label: "Soft-tissue laser",                        w: 1,   types: "all" },
+  { id: "implant",  label: "Implant surgical motor",                   w: 1,   types: ["gp","oms","perio"] },
+  { id: "ceph",     label: "Cephalometric (ceph) unit",               w: 1,   types: ["ortho"] },
+  { id: "scope",    label: "Surgical operating microscope",            w: 2,   types: ["endo","perio"] },
+  { id: "sedation", label: "IV sedation & anesthesia monitoring",      w: 2,   types: ["oms"] },
+  { id: "piezo",    label: "Piezosurgery unit",                        w: 1,   types: ["oms","perio"] },
+  { id: "n2o",      label: "Nitrous oxide (N₂O) sedation",        w: 0.5, types: ["gp","pedo"] }
+];
+
+// Facility & curb-appeal option scores (0–100). Real estate is narrative-only.
+const FACILITY = {
+  condition:  { new: 100, good: 70, dated: 40, poor: 15 },
+  visibility: { high: 100, mod: 60, low: 30 }
 };
 
 const TYPE_LABELS = { gp: "general practice", oms: "oral surgery practice", ortho: "orthodontic practice", pedo: "pediatric practice", endo: "endodontic practice", perio: "periodontal practice" };
@@ -486,9 +547,26 @@ function readInputs() {
     assoc: num("t_assoc") ?? 0, hyg: num("t_hyg") ?? 0,
     team: (num("t_assoc") ?? 0) + (num("t_hyg") ?? 0) + (num("t_asst") ?? 0) + (num("t_front") ?? 0) + (num("t_mgr") ?? 0) + (num("t_ins") ?? 0),
     ffs: ffs, ppo: ppo, mcd: mcd,
-    equip: ["eq_pano","eq_cbct","eq_scan","eq_mill","eq_laser"].filter(id => $(id).checked).length,
-    modern: $("eq_modern").checked
+    modern: $("eq_modern").checked,
+    facCondition: $("fac_condition").value, facVisibility: $("fac_visibility").value,
+    facProminent: $("fac_prominent").checked, realEstate: $("fac_realestate").value
   };
+}
+
+// Equipment sub-score 0–100 for the current practice type + recency toggle.
+function equipMetrics(type, modern) {
+  const items = EQUIPMENT.filter(e => e.types === "all" || e.types.includes(type));
+  let sum = 0, count = 0;
+  items.forEach(e => { if (equipState[e.id]) { sum += e.w; count++; } });
+  const score = Math.min(100, (sum / BENCHMARKS.equipTarget) * 85 + (modern ? 15 : 0));
+  return { score, count };
+}
+
+// Facility & curb-appeal sub-score 0–100 (real estate excluded — narrative only).
+function facilityScore(d) {
+  const cond = FACILITY.condition[d.facCondition] ?? 60;
+  const vis = FACILITY.visibility[d.facVisibility] ?? 60;
+  return 0.5 * cond + 0.35 * vis + 0.15 * (d.facProminent ? 100 : 50);
 }
 
 function adjEbitda(coll, ohPct, ownerProd, repComp, ohIncl) {
@@ -517,9 +595,11 @@ function computeScore(d) {
   let docDep = Math.max(0, Math.min(100, (95 - d.ownerProd) / 55 * 100));
   if (d.assoc > 0) docDep = Math.min(100, docDep + 15);
   const location = { metro: 80, suburban: 60, rural: 35 }[d.setting];
-  const equipment = Math.min(100, (d.equip / 5) * 70 + (d.modern ? 30 : 0));
-  const score = w.docDep * docDep + w.growth * growth + w.payer * payer + w.location * location + w.equipment * equipment;
-  return { score, parts: { growth, payer, docDep, location, equipment }, cagr };
+  const eq = equipMetrics(d.type, d.modern);
+  const facility = facilityScore(d);
+  const score = w.docDep * docDep + w.growth * growth + w.payer * payer
+              + w.location * location + w.equipment * eq.score + w.facility * facility;
+  return { score, parts: { growth, payer, docDep, location, equipment: eq.score, equipCount: eq.count, facility }, cagr };
 }
 
 function computeTrack2(ebitda, score, type) {
@@ -635,8 +715,18 @@ function recalc() {
   } else if (lastOh < BENCHMARKS.overheadNorm - 2) {
     li.push("Overhead of <strong>" + lastOh + "%</strong> is leaner than the ~62% GP norm — that discipline shows up directly in your EBITDA and your multiple.");
   }
-  if (d.equip >= 3 && d.modern) li.push("A modern equipment stack (" + d.equip + " of 5 major categories, mostly under 6 years old) means no re-equip bill for the buyer — it nudges you up within the range.");
-  else if (d.equip <= 1) li.push("Light equipment isn't a deal-breaker, but buyers price in the CBCT/scanner spend they'll face — expect it to hold you slightly lower in the range.");
+  const eqm = equipMetrics(d.type, d.modern);
+  if (eqm.score >= 75) li.push("A modern equipment stack (" + eqm.count + " major item" + (eqm.count === 1 ? "" : "s") + (d.modern ? ", mostly recent" : "") + ") means little or no re-equip bill for the buyer — it nudges you up within the range.");
+  else if (eqm.count <= 1) li.push("Light equipment isn't a deal-breaker, but buyers price in the CBCT/scanner/chair spend they'll face — expect it to hold you slightly lower in the range.");
+  // Facility & curb appeal
+  const facBits = [];
+  if (d.facCondition === "new") facBits.push("a recently remodeled office (turnkey, no buildout for the buyer)");
+  else if (d.facCondition === "poor") facBits.push("an office that reads as tired — a buyer will price in a refresh");
+  if (d.facVisibility === "high") facBits.push("a high-visibility location that markets itself" + (d.facProminent ? " from a building that's its own billboard" : ""));
+  else if (d.facVisibility === "low") facBits.push("a low-visibility location that leans more on reputation than walk-by traffic");
+  if (facBits.length) li.push("On curb appeal: " + facBits.join(", and ") + " — these shift where you land in the range, not the range itself.");
+  if (d.realEstate === "own") li.push("You own the building — worth flagging separately in any sale: it's a distinct asset you can sell alongside the practice or keep and lease back to the buyer for ongoing income. This estimate values the <em>practice</em> only, not the real estate.");
+  else if (d.realEstate === "leaselong") li.push("A long, favorable lease is a quiet plus — buyers like knowing the location and rent are locked in.");
   if (d.setting === "rural") li.push("Rural practices see fewer competing buyers in doctor-to-doctor sales, which typically means a lower percentage of collections — though scarcity can work in your favor with the right DSO.");
   if (d.ops && d.ops >= 6 && d.ownerProd >= 80) li.push("With " + d.ops + " operatories and most production running through you, there's visible unused capacity — a growth story buyers like, if you can show a plan to fill the chairs.");
   if (t2.estimated) li.push("<strong>Note:</strong> " + TYPE_LABELS[d.type].charAt(0).toUpperCase() + TYPE_LABELS[d.type].slice(1) + " multiples are marked <em>estimated</em> — published specialty data is thinner than for GP and oral surgery, so treat the DSO track as directional.");
@@ -662,10 +752,25 @@ function updateWhatIf(d, wEbitda, wColl, score, lastOh) {
   $("whatifvalue").textContent = (t2.belowFloor || newEbitda <= 0) ? "below the DSO floor" : fmtShort(t2.vLo * hc) + " – " + fmtShort(t2.vHi * hc);
 }
 
+// Equipment list — rendered dynamically, adapts to practice type, state persists
+let equipState = {};
+function renderEquip() {
+  const type = $("ptype").value;
+  const items = EQUIPMENT.filter(e => e.types === "all" || e.types.includes(type));
+  $("equiplist").innerHTML = items.map(e =>
+    '<label class="chk"><input type="checkbox" data-eq="' + e.id + '"' + (equipState[e.id] ? " checked" : "") + " /> " + e.label + "</label>"
+  ).join("");
+  $("equiplist").querySelectorAll("input").forEach(inp => {
+    inp.addEventListener("change", () => { equipState[inp.dataset.eq] = inp.checked; recalc(); });
+  });
+}
+renderEquip();
+
 // Wire up
-["ptype","pstate","ops","c1","o1","c2","o2","c3","o3","ownerprod","repcomp","t_assoc","t_hyg","t_asst","t_front","t_mgr","t_ins","ffs","ppo","mcd","eq_pano","eq_cbct","eq_scan","eq_mill","eq_laser","eq_modern"].forEach(id => {
+["pstate","ops","c1","o1","c2","o2","c3","o3","ownerprod","repcomp","t_assoc","t_hyg","t_asst","t_front","t_mgr","t_ins","ffs","ppo","mcd","eq_modern","fac_condition","fac_visibility","fac_prominent","fac_realestate"].forEach(id => {
   $(id).addEventListener("input", recalc);
 });
+$("ptype").addEventListener("change", () => { renderEquip(); recalc(); });
 $("ohtarget").addEventListener("input", () => { $("ohtarget").dataset.touched = "1"; recalc(); });
 ["ownerprod","repcomp","ffs","ppo","mcd"].forEach(id => {
   const lbl = { ownerprod: "ownerprodv", repcomp: "repcompv", ffs: "ffsv", ppo: "ppov", mcd: "mcdv" }[id];

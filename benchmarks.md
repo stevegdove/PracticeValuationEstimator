@@ -92,6 +92,13 @@ Specialty-specific and rural/Medicaid overhead splits were REFUTED — do not us
 position-within-range factors, clearly labeled as our model, not market data):**
 - Payer mix (FFS > PPO > Medicaid) — all quantified claims refuted 0-3
 - Revenue growth trend, rural vs metro, equipment modernity (CBCT/scanners/mills), operatory capacity
+- Facility condition / remodel recency, location visibility & signage, building prominence
+  (all direction-only; kept as LIGHT nudges — equipment/location/facility together weigh 0.24
+  of the score vs 0.76 for the doc-dependence/growth/payer drivers). Real estate ownership is
+  narrative-only (a separate asset, not part of practice goodwill) — never priced in the estimate.
+- Equipment catalog + facility scoring are editable config blocks (EQUIPMENT / FACILITY consts,
+  equipTarget) in index.html; equipment list adapts to practice type (ceph→ortho, microscope→endo/perio,
+  IV sedation→OMS, etc.). Added 2026-07-09.
 
 ## Specialty bands — ESTIMATED ONLY (Steve's call 2026-07-08: ship with "estimated" flag)
 
